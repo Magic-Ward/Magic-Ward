@@ -1,0 +1,29 @@
+name: Update GitHub Stats
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Runs every hour
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate GitHub Stats
+        uses: anuraghazra/github-readme-stats@latest
+        with:
+          username: Magic-Ward
+          cache_seconds: 3600
+          theme: dark
+          hide_title: true
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add images/
+          git commit -m "Update GitHub stats" || echo "No changes to commit"
+          git push
